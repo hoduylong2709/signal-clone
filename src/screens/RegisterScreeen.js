@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
-import { Context as AuthContext } from '../context/AuthContext';
+import { auth } from '../../firebase';
 
 const RegisterScreeen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -10,7 +10,16 @@ const RegisterScreeen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [imageUrl, setImageUrl] = useState('');
 
-  const { signup } = useContext(AuthContext);
+  const signup = () => {
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(authUser => {
+        authUser.user.updateProfile({
+          displayName: name,
+          photoURL: imageUrl || 'http://www.connectingcouples.us/wp-content/uploads/2019/07/avatar-placeholder.png'
+        });
+      })
+      .catch(error => alert(error.message));
+  };
 
   return (
     <View style={styles.container}>
@@ -27,12 +36,16 @@ const RegisterScreeen = ({ navigation }) => {
           type='text'
           value={name}
           onChangeText={setName}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
         <Input
           placeholder='Email'
           type='email'
           value={email}
           onChangeText={setEmail}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
         <Input
           placeholder='Password'
@@ -40,6 +53,8 @@ const RegisterScreeen = ({ navigation }) => {
           secureTextEntry
           value={password}
           onChangeText={setPassword}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
         <Input
           placeholder='Profile Picture URL (optional)'
@@ -47,6 +62,8 @@ const RegisterScreeen = ({ navigation }) => {
           value={imageUrl}
           onChangeText={setImageUrl}
           onSubmitEditing={signup}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
       </View>
 

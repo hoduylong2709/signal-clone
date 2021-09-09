@@ -1,14 +1,15 @@
-import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
+import { auth } from '../../firebase';
 import { Context as AuthContext } from '../context/AuthContext';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { state, signin } = useContext(AuthContext);
+  const { signin } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -26,6 +27,8 @@ const LoginScreen = ({ navigation }) => {
           type='email'
           value={email}
           onChangeText={setEmail}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
         <Input
           placeholder='Password'
@@ -33,6 +36,8 @@ const LoginScreen = ({ navigation }) => {
           type='password'
           value={password}
           onChangeText={setPassword}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
       </View>
       <Button
