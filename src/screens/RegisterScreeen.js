@@ -1,8 +1,8 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
-import { auth } from '../../firebase';
+import { Context as AuthContext } from '../context/AuthContext';
 
 const RegisterScreeen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -10,16 +10,7 @@ const RegisterScreeen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [imageUrl, setImageUrl] = useState('');
 
-  const signup = () => {
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(authUser => {
-        authUser.user.updateProfile({
-          displayName: name,
-          photoURL: imageUrl || 'http://www.connectingcouples.us/wp-content/uploads/2019/07/avatar-placeholder.png'
-        });
-      })
-      .catch(error => alert(error.message));
-  };
+  const { signup } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -61,7 +52,7 @@ const RegisterScreeen = ({ navigation }) => {
           type='text'
           value={imageUrl}
           onChangeText={setImageUrl}
-          onSubmitEditing={signup}
+          onSubmitEditing={() => signup({ email, password })}
           autoCapitalize="none"
           autoCorrect={false}
         />
@@ -70,7 +61,7 @@ const RegisterScreeen = ({ navigation }) => {
       <Button
         containerStyle={styles.button}
         title='Register'
-        onPress={signup}
+        onPress={() => signup({ email, password })}
         raised
       />
     </View>

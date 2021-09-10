@@ -1,34 +1,59 @@
-import React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import React, { useContext } from 'react';
+import { StyleSheet, SafeAreaView, ScrollView, View, TouchableOpacity } from 'react-native';
+import { Avatar, Button } from 'react-native-elements';
 import CustomListItem from '../components/CustomListItem';
 import { auth } from '../../firebase';
+import { Context as AuthContext } from '../context/AuthContext';
+import Spacer from '../components/Spacer';
+import { AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 
 const HomeScreen = () => {
+  const { signout } = useContext(AuthContext);
+
   return (
     <SafeAreaView>
       <ScrollView>
         <CustomListItem />
+        <Spacer>
+          <Button title='Log out' onPress={signout} />
+        </Spacer>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-HomeScreen.navigationOptions = () => {
+HomeScreen.navigationOptions = ({ navigation }) => {
   return {
-    title: 'Signal test',
+    title: 'Signal',
     headerStyle: { backgroundColor: 'white' },
     headerTitleStyle: { color: 'black' },
     headerTintColor: 'black',
-    headerRight: () => (
-      <View>
+    headerLeft: () => (
+      <View style={{ marginLeft: 20 }}>
         <Avatar rounded source={{ uri: auth?.currentUser?.photoURL }} />
+      </View>
+    ),
+    headerRight: () => (
+      <View style={styles.headerRight}>
+        <TouchableOpacity activeOpacity={0.5}>
+          <AntDesign name="camerao" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('ChatCreate')}>
+          <SimpleLineIcons name="pencil" size={24} color="black" />
+        </TouchableOpacity>
       </View>
     )
   };
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  headerRight: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 80,
+    marginRight: 20
+  }
+});
 
 export default HomeScreen;
 

@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
 import { auth } from '../../firebase';
 import { navigate } from '../navigationRef';
@@ -19,11 +18,24 @@ const tryLocalSignin = dispatch => () => {
     }
   });
 };
-const signin = dispatch => () => {
-  alert('You clicked login button!');
+const signin = dispatch => ({ email, password }) => {
+  auth.signInWithEmailAndPassword(email, password)
+    .catch(error => alert(error));
 };
-const signup = dispatch => () => { };
-const signout = dispatch => () => { };
+const signup = dispatch => ({ email, password, name, imageUrl }) => {
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(authUser => {
+      authUser.user.updateProfile({
+        displayName: name,
+        photoURL: imageUrl || 'http://www.connectingcouples.us/wp-content/uploads/2019/07/avatar-placeholder.png'
+      });
+    })
+    .catch(error => alert(error.message));
+};
+const signout = dispatch => () => {
+  auth.signOut()
+    .then(() => navigate('Login'));
+};
 
 export const { Provider, Context } = createDataContext(
   authReducer,

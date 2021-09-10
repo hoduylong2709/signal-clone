@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Input, Image } from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
-import { auth } from '../../firebase';
 import { Context as AuthContext } from '../context/AuthContext';
 
 const LoginScreen = ({ navigation }) => {
@@ -38,12 +37,13 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={setPassword}
           autoCapitalize="none"
           autoCorrect={false}
+          onSubmitEditing={() => signin({ email, password })}
         />
       </View>
       <Button
         title='Login'
         containerStyle={styles.button}
-        onPress={signin}
+        onPress={() => signin({ email, password })}
       />
       <Button
         title='Register'

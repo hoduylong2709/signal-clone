@@ -7,6 +7,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreeen from './src/screens/RegisterScreeen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import HomeScreen from './src/screens/HomeScreen';
+import ChatCreateScreen from './src/screens/ChatCreateScreen';
 
 const LoginStack = createStackNavigator({
   Login: LoginScreen,
@@ -20,7 +21,8 @@ const LoginStack = createStackNavigator({
 });
 
 const MainStack = createStackNavigator({
-  Home: HomeScreen
+  Home: HomeScreen,
+  ChatCreate: ChatCreateScreen
 }, {
   defaultNavigationOptions: {
     headerStyle: { backgroundColor: '#2C6BED' },
