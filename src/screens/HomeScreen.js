@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, View, TouchableOpacity } from 'react-native';
 import { Avatar, Button } from 'react-native-elements';
 import CustomListItem from '../components/CustomListItem';
@@ -6,14 +6,30 @@ import { auth } from '../../firebase';
 import { Context as AuthContext } from '../context/AuthContext';
 import Spacer from '../components/Spacer';
 import { AntDesign, SimpleLineIcons } from '@expo/vector-icons';
+import { db } from '../../firebase';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = db.collection('chats').onSnapshot(snapshot => setChats(
+      snapshot.docs.map(doc => ({
+        id: doc.id,
+        data: doc.data()
+      }))
+    ));
+    return unsubscribe;
+  }, []);
+
+  const enterChat = (id, chatName) => {
+    navigation.navigate('Chat', { id, chatName });
+  };
 
   return (
     <SafeAreaView>
       <ScrollView>
-        <CustomListItem />
+        {chats.map(({ id, data: { chatName } }) => <CustomListItem key={id} id={id} chatName={chatName} enterChat={enterChat} />)}
         <Spacer>
           <Button title='Log out' onPress={signout} />
         </Spacer>
