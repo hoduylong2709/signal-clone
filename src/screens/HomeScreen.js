@@ -2,15 +2,17 @@ import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, View, TouchableOpacity } from 'react-native';
 import { Avatar, Button } from 'react-native-elements';
 import CustomListItem from '../components/CustomListItem';
-import { auth } from '../../firebase';
 import { Context as AuthContext } from '../context/AuthContext';
 import Spacer from '../components/Spacer';
 import { AntDesign, SimpleLineIcons } from '@expo/vector-icons';
-import { db } from '../../firebase';
+import { db, auth } from '../../firebase';
+import { StatusBar } from 'expo-status-bar';
 
 const HomeScreen = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
   const [chats, setChats] = useState([]);
+
+  const photoUrl = auth.currentUser.photoURL;
 
   useEffect(() => {
     const unsubscribe = db.collection('chats').onSnapshot(snapshot => setChats(
@@ -23,11 +25,12 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   const enterChat = (id, chatName) => {
-    navigation.navigate('Chat', { id, chatName });
+    navigation.navigate('Chat', { id, chatName, photoUrl });
   };
 
   return (
     <SafeAreaView>
+      <StatusBar style='black' />
       <ScrollView>
         {chats.map(({ id, data: { chatName } }) => <CustomListItem key={id} id={id} chatName={chatName} enterChat={enterChat} />)}
         <Spacer>

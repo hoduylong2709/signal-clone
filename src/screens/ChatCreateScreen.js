@@ -1,15 +1,17 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import { Context as ChatContext } from '../context/ChatContext';
+import { StatusBar } from 'expo-status-bar';
 
 const ChatCreateScreen = () => {
   const [chatName, setChatName] = useState('');
   const { createChat } = useContext(ChatContext);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style='light' />
       <Input
         placeholder='Enter a chat name'
         value={chatName}
@@ -21,9 +23,10 @@ const ChatCreateScreen = () => {
       />
       <Button
         title='Create a new chat'
+        disabled={!chatName}
         onPress={() => createChat(chatName)}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

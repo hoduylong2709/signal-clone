@@ -52,7 +52,7 @@ const RegisterScreeen = ({ navigation }) => {
           type='text'
           value={imageUrl}
           onChangeText={setImageUrl}
-          onSubmitEditing={() => signup({ email, password })}
+          onSubmitEditing={() => signup({ email, password, name, imageUrl })}
           autoCapitalize="none"
           autoCorrect={false}
         />
@@ -61,7 +61,7 @@ const RegisterScreeen = ({ navigation }) => {
       <Button
         containerStyle={styles.button}
         title='Register'
-        onPress={() => signup({ email, password })}
+        onPress={() => signup({ email, password, name, imageUrl })}
         raised
       />
     </View>
